@@ -1,0 +1,36 @@
+#calculator-body {
+  background-color: lightgray;
+  height: 70vh;
+  width: 30vh;
+  display: flex;
+}
+
+#input {
+  display: flex;
+  flex-direction: row;
+}
+
+#number-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+#operation-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.row1, .row2, .row3, #bottom-row {
+  display: flex;
+  flex-direction: row;
+}
+
+button {
+  background-color: gray;
+  height: 2vh;
+  width: 2vh;
+}
+
+#calculate {
+  width: 4vh;
+}
