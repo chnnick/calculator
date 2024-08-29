@@ -1,19 +1,31 @@
-const one = document.querySelector("#one");
-const two = document.querySelector("#two");
-const three = document.querySelector("#three");
-const four = document.querySelector("#four");
-const five = document.querySelector("#five");
-const six = document.querySelector("#six");
-const seven = document.querySelector("#seven");
-const eight = document.querySelector("#eight");
-const nine = document.querySelector("#nine");
-const zero = document.querySelector("#zero");
+const oneButton = document.querySelector("#one");
+const twoButton = document.querySelector("#two");
+const threeButton = document.querySelector("#three");
+const fourButton = document.querySelector("#four");
+const fiveButton = document.querySelector("#five");
+const sixButton = document.querySelector("#six");
+const sevenButton = document.querySelector("#seven");
+const eightButton = document.querySelector("#eight");
+const nineButton = document.querySelector("#nine");
+const zeroButton = document.querySelector("#zero");
 const addButton = document.querySelector("#add");
 const subtractButton = document.querySelector("#subtract");
 const multiplyButton = document.querySelector("#multiply");
 const divideButton = document.querySelector("#divide");
 const calculateButton = document.querySelector("#calculate");
-const display = document.querySelector("#output");
+const clearButton = document.querySelector("#clear");
+const display = document.querySelector("#display");
+
+oneButton.addEventListener("click", () => createNumber(1));
+twoButton.addEventListener("click", () => createNumber(2));
+threeButton.addEventListener("click", () => createNumber(3));
+fourButton.addEventListener("click", () => createNumber(4));
+fiveButton.addEventListener("click", () => createNumber(5));
+sixButton.addEventListener("click", () => createNumber(6));
+sevenButton.addEventListener("click", () => createNumber(7));
+eightButton.addEventListener("click", () => createNumber(8));
+nineButton.addEventListener("click", () => createNumber(9));
+zeroButton.addEventListener("click", () => createNumber(0));
 
 /*
   THERE ARE ONLY 2 DIGITS, 1 and 2
@@ -22,38 +34,58 @@ const display = document.querySelector("#output");
 */
 let curDigit = 1;
 
-let curOperation = "";
+/*
+  Calculated represents if you have run a calculation, and if so, 
+  your first number will be locked, and you can still do operation with it
+  BUT, if you type a different number you will reset
+*/
+let calculated = false;
 
-one.addEventListener("click", foo);
-two.addEventListener("click", () => createNumber(2));
-three.addEventListener("click", () => createNumber(3));
-four.addEventListener("click", () => createNumber(4));
-five.addEventListener("click", () => createNumber(5));
-six.addEventListener("click", () => createNumber(6));
-seven.addEventListener("click", () => createNumber(7));
-eight.addEventListener("click", () => createNumber(8));
-nine.addEventListener("click", () => createNumber(9));
-zero.addEventListener("click", () => createNumber(0));
+let curOperation = null;
 
-
-
-let num1 = 0;
-let num2 = 0;
-
-function foo() {
-  console.log("works");
-}
+let num1 = null;
+let num2 = null;
 
 function createNumber(input) {
-  if (curDigit === 1) {
-    num1 = (num1 * 10) + input;
+  if (!calculated) {
+    if (curDigit === 1) {
+      if (num1 === null) {
+        num1 = 0;
+      }
+      num1 = (num1 * 10) + input;
+      display.innerText = num1;
+    }
+    else if (curDigit === 2) {
+      if (num2 === null) {
+        num2 = 0;
+      }
+      num2 = (num2 * 10) + input;
+      display.innerText = num2;
+    }
+    else {
+      display.innerText = "ERROR";
+    }
   }
-  else if (curDigit === 2) {
-    num2 = (num2 * 10) + input;
+  else {
+    calculated = false;
+    num1 = (num1 * 10) + input;
+    display.innerText = num1;
+    curDigit = 1;
   }
 }
 
-addButton.addEventListener("click", switchDigit());
+addButton.addEventListener("click", () => setOperation("+"));
+subtractButton.addEventListener("click", () => setOperation("-"));
+multiplyButton.addEventListener("click", () => setOperation("*"));
+divideButton.addEventListener("click", () => setOperation("/"));
+
+// sets the operation + - / * and switches digit to be put in num2
+function setOperation(operation) {
+  calculated = false;
+  display.innerText = operation;
+  curOperation = operation;
+  switchDigit();
+}
 
 function switchDigit() {
   if (curDigit === 1) {
@@ -64,18 +96,50 @@ function switchDigit() {
   }
 }
 
+calculateButton.addEventListener("click", calculate);
+
+function calculate() {
+  // if no operation found, just return current num1
+  if (curOperation === null) {
+    display.innerText = num1;
+  }
+  else if (num2 === null) {
+    display.innerText = num1;
+  }
+  else {
+    const calculation = operate(num1, num2, curOperation);
+    num2 = null;
+    curOperation = null;
+    num1 = calculation;
+    display.innerText = calculation;
+    calculated = true;
+  }
+}
+
+clearButton.addEventListener("click", clear);
+
+// clears all fields
+function clear() {
+  display.innerText = "";
+  num1 = null;
+  num2 = null;
+  curOperation = null;
+  curDigit = 1;
+}
+
+//TODO: test
 function operate(num1, num2, func) {
   switch (func) {
-    case add : {
+    case "+" : {
       return add(num1, num2);
     }
-    case subtract : {
+    case "-" : {
       return subtract(num1, num2);
     }
-    case multiply : {
+    case "*" : {
       return multiply(num1, num2);
     }
-    case divide : {
+    case "/" : {
       return divide(num1, num2);
     }
   }
@@ -94,5 +158,8 @@ const multiply = function (a, b) {
 };
 
 const divide = function (a, b) {
+  if (b === 0) {
+    return "ERROR, dividing by zero";
+  }
   return a / b;
 };
