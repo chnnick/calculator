@@ -1,19 +1,3 @@
-const add = function (a, b) {
-  return a + b;
-};
-
-const subtract = function (a, b) {
-  return a - b;
-};
-
-const multiply = function (a, b) {
-  return a * b;
-};
-
-const divide = function (a, b) {
-  return a / b;
-};
-
 const one = document.querySelector("#one");
 const two = document.querySelector("#two");
 const three = document.querySelector("#three");
@@ -38,23 +22,46 @@ const display = document.querySelector("#output");
 */
 let curDigit = 1;
 
-one.addEventListener("click", () => createNumber(1, curDigit));
-two.addEventListener("click", () => createNumber(2, curDigit));
-three.addEventListener("click", () => createNumber(3, curDigit));
-four.addEventListener("click", () => createNumber(4, curDigit));
-five.addEventListener("click", () => createNumber(5, curDigit));
-six.addEventListener("click", () => createNumber(6, curDigit));
-seven.addEventListener("click", () => createNumber(7, curDigit));
-eight.addEventListener("click", () => createNumber(8, curDigit));
-nine.addEventListener("click", () => createNumber(9, curDigit));
-zero.addEventListener("click", () => createNumber(0, curDigit));
+let curOperation = "";
+
+one.addEventListener("click", foo);
+two.addEventListener("click", () => createNumber(2));
+three.addEventListener("click", () => createNumber(3));
+four.addEventListener("click", () => createNumber(4));
+five.addEventListener("click", () => createNumber(5));
+six.addEventListener("click", () => createNumber(6));
+seven.addEventListener("click", () => createNumber(7));
+eight.addEventListener("click", () => createNumber(8));
+nine.addEventListener("click", () => createNumber(9));
+zero.addEventListener("click", () => createNumber(0));
+
 
 
 let num1 = 0;
 let num2 = 0;
 
-function createNumber(input, digit) {
-  curNum = (curNum * 10) + input;
+function foo() {
+  console.log("works");
+}
+
+function createNumber(input) {
+  if (curDigit === 1) {
+    num1 = (num1 * 10) + input;
+  }
+  else if (curDigit === 2) {
+    num2 = (num2 * 10) + input;
+  }
+}
+
+addButton.addEventListener("click", switchDigit());
+
+function switchDigit() {
+  if (curDigit === 1) {
+    curDigit = 2;
+  }
+  else {
+    curDigit = 1;
+  }
 }
 
 function operate(num1, num2, func) {
@@ -73,3 +80,19 @@ function operate(num1, num2, func) {
     }
   }
 }
+
+const add = function (a, b) {
+  return a + b;
+};
+
+const subtract = function (a, b) {
+  return a - b;
+};
+
+const multiply = function (a, b) {
+  return a * b;
+};
+
+const divide = function (a, b) {
+  return a / b;
+};
